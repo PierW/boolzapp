@@ -104,3 +104,35 @@ footer > input {
   margin: 0 20px;
   height: 100%;
 }
+
+.row{
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.row:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.message{
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 50%;
+}
+
+.message small {
+  float: right;
+  color: grey;
+}
+
+.message.recived{
+  float: left;
+  background-color: white;
+}
+
+.message.sent{
+  float: right;
+  background-color: #E0F8BD;
+}
