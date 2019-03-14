@@ -61,6 +61,7 @@ main{
   padding: 25px 15px;
   background-image: url("img/msg-background.jpg");
   overflow-y: auto;
+  display: none;
 }
 
 footer{
@@ -139,6 +140,7 @@ footer > input {
   border-radius: 5px;
   padding: 10px;
   max-width: 50%;
+  overflow-wrap: break-word;
 }
 
 .message small {
@@ -203,10 +205,14 @@ footer > input {
   line-height: 22px;
 }
 
-.active{
-  background-color: #E9E9E9;
-}
-
 .finded{
   display: none;
+}
+
+.active{
+  background-color: lightgrey;
+}
+
+.activechat{
+  display: block;
 }

@@ -28,7 +28,7 @@ function pushMessage(bool, text) {
   newRow.append(newMessage);
 
   //PUSHO TUTTO NELL'HTML SENZA CANCELLARE IL CONTENUTO ESISTENTE.
-  var main = $("main");
+  var main = $("main.activechat");
   main.append(newRow);
 
   // LANCIO RISPOSTA AUTOMATICA
@@ -74,29 +74,68 @@ function search() {
 
 function bot(bool, text) {
 
+  var message = text.toLowerCase(); // Trasformo tutto in minuscolo (NO-CASE SENSITIVE)
+
   switch (!bool) {
-    case text.includes("ciao"):
-      text = "Ciao Prof, come stai?";
+    case message.includes("ciao"):
+      message = "Ciao Prof, come stai?";
       break;
-    case text.includes("stai"):
-      text = "Bene grazie e tu?";
+    case message.includes("tu"):
+      message = "Bene grazie!";
       break;
-    case text.includes("bene"):
-      text = "Bene grazie! :P";
+    case message.includes("stai"):
+      message = "Mai stato meglio";
+      break;
+    case message.includes("bene"):
+      message = "Grende, mi fa piacere :P";
       break;
     default:
-      text = "non capisco, puoi ripetere perpiacere?";
+      message = "non capisco, puoi ripetere perpiacere?";
   }
 
-  pushMessage(bool, text);
+  pushMessage(bool, message);
+}
+
+function changeChat(me, contacts) {
+
+  // var contacts = $("#contatti > .myfriend"); //RIPRENDO LA LISTA ------>  Non li ho ripresi perchè li ho nell'init avendo la funzione anonima
+      contacts.removeClass("active");           //CANCELLO A TUTTI LA CLASSE ACTIVE (SENZA FARE UN CICLO INUTILE)
+
+  // var me = $(this);                          //PRENDO L'ELEMENTO CLICCATO ----> Non li ho ripresi perchè li ho nell'init avendo la funzione anonima
+      me.addClass("active");                    //AGGIUNGO CLASSE (SFONDO)
+  var meIndex = me.index();                     //RICAVO L'INDICE
+
+  var boxchat = $("main");                      //PRENDO TUTTI I BOXCHAT (STESSO NUMERO DEI CONTATTI IN LISTA)
+      boxchat.removeClass("activechat");        //RIMUOVO A TUTTI LA CLASSE (LI NASCONDO TUTTI)
+  var boxChatSelected = boxchat.eq(meIndex);    //PRENDO QUELLO CON INDICE ASSOCIATO
+      boxChatSelected.addClass("activechat");   //AGGIUNGO LA CLASSE E LO RENDO VISIBILE
+
+  var idChat = $(".idchat strong");             //PRENDO IL TAG CHE CONTIENE IL VECCHIO NOME
+  var newID = me.find("h3").text();             //PRENDO IL NUOVO NOME
+      idChat.text(newID);                       //LO PUSHO
+}
+
+function deleteMessage() {
+
+  var me = $(this);
+  var row = me.parent();                        //PRENDO LA RIGA INTERA, ALTRIMENTI RIMARREBBE VUOTA.
+      row.remove();
 }
 
 
 function init() {
 
-  var myMessage = $("#mymessage");  //INPUT
-  myMessage.keyup(messageInputEvent); //FUNZIONE PER TRIGHERARE EVENTO PULSANTE PREMUTO
+  var myMessage = $("#mymessage");               //INPUT
+  myMessage.keyup(messageInputEvent);            //FUNZIONE PER TRIGHERARE EVENTO PULSANTE PREMUTO
 
-  var searchinput = $("#search > input"); //INPUT RICERCA
+  var searchinput = $("#search > input");        //INPUT RICERCA
   searchinput.keyup(search);
-}
+
+  var contactsList = $("#contatti > .myfriend");    //Prendo tutta la lista dei contatti
+  contactsList.click(function() {                   // In questo caso al posto si fare  contactsList.click(changeChat) senza nessun parametro in INGRESSO
+    var me = $(this);                               // Ho usato una funzione anonima per passargli due parametri:
+    changeChat(me, contactsList)                    // 1) Il me, scelta obbligata metterlo qui e non nella funzione sopra.
+  });                                               // 2) La var contactslist così non la devo richiamare nella funzione sopra (Infatti ora è commentata)
+
+  $(document).on("dblclick", ".message.sent", deleteMessage); //ELIMINO RIGA MESSAGGI INVIATI SOLO AL DOPPIO CLICK
+}                                                            //// NOTE: Facendo in questo modo ricarico il DOM html anche per i nuovi elmenti inseriti dopo. Altrimenti caricherebbe solo quelli iniziali nativi html.
