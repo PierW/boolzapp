@@ -31,6 +31,8 @@ function pushMessage(bool, text) {
   var main = $("main.activechat");
   main.append(newRow);
 
+  main.animate({scrollTop: main.prop("scrollHeight")}, 0);  //SCROLLO IN AUTOMATICO VERSO IL BASSO IN 0MS
+
   // LANCIO RISPOSTA AUTOMATICA
   if (bool) {                     //SOLO SE VERO. QUESTO MI PERMETTE DI NON AVERE UN CICLO INFINITO E DI RICEVERE SOLO UNA RISPOSTA PER MESSAGGIO
     setTimeout(function() {
